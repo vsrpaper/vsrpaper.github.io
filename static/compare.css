@@ -1,0 +1,227 @@
+/* =========================================================================
+   Interactive comparison viewer — dark, matched to style.css tokens
+   ========================================================================= */
+
+.cmp { margin-top: 8px; }
+
+/* dataset tabs */
+.cmp-tabs { display: flex; gap: 8px; justify-content: center; margin-bottom: 22px; }
+.cmp-tab {
+  padding: 8px 24px; border: 1px solid var(--border-strong); background: var(--card);
+  border-radius: 999px; cursor: pointer; font: inherit; font-size: .95rem; color: var(--fg-soft);
+  transition: border-color .12s, color .12s;
+}
+.cmp-tab:hover { border-color: var(--sky); color: var(--fg); }
+.cmp-tab.active { background: var(--grad); color: #06121f; border-color: transparent; font-weight: 700; }
+
+/* layout: navigator + viewer */
+.cmp-body { display: grid; grid-template-columns: 340px 1fr; gap: 26px; align-items: start; }
+@media (max-width: 900px) { .cmp-body { grid-template-columns: 1fr; } }
+
+/* ---- navigator --------------------------------------------------------- */
+.cmp-nav { position: sticky; top: 20px; }
+.nav-frame {
+  position: relative; width: 100%; aspect-ratio: 2 / 1;
+  border-radius: 12px; overflow: hidden; background: #0a1018;
+  border: 1px solid var(--border); box-shadow: 0 12px 34px rgba(0, 0, 0, .4);
+}
+.nav-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.nav-frame.nav-missing::after {
+  content: "8K frame preview\A(drop nav_" attr(data-ds) ".jpg into static/figures)";
+  white-space: pre; position: absolute; inset: 0; display: flex; align-items: center;
+  justify-content: center; text-align: center; color: var(--muted); font-size: .78rem; padding: 12px;
+}
+.nav-grid {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    repeating-linear-gradient(to right,  rgba(255,255,255,.06) 0 1px, transparent 1px calc(100%/16)),
+    repeating-linear-gradient(to bottom, rgba(255,255,255,.06) 0 1px, transparent 1px calc(100%/8));
+}
+.nav-hot {
+  position: absolute; margin: 0; padding: 0; cursor: pointer;
+  border: 1.5px solid rgba(56, 189, 248, .85); background: rgba(56, 189, 248, .18);
+  color: #fff; font: inherit; font-size: .6rem;
+  display: flex; align-items: center; justify-content: center; transition: background .12s, box-shadow .12s;
+}
+.nav-hot:hover { background: rgba(56, 189, 248, .42); }
+.nav-hot.active {
+  border-color: var(--gold); background: rgba(251, 191, 36, .34);
+  box-shadow: 0 0 0 2px rgba(251, 191, 36, .5); z-index: 2;
+}
+.nav-hot span { background: rgba(0, 0, 0, .6); border-radius: 4px; padding: 0 4px; line-height: 1.4; }
+.nav-hint { color: var(--muted); font-size: .82rem; margin: 12px 2px 0; }
+
+/* ---- per-dataset metrics table (left column) --------------------------- */
+.cmp-metrics { margin-top: 20px; }
+.metrics-head { font-family: var(--font-display); font-size: .82rem; color: var(--fg-soft); margin-bottom: 9px; letter-spacing: .01em; }
+.metrics-head span { color: var(--sky); font-weight: 700; }
+.metrics-table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: .68rem; }
+.metrics-table th, .metrics-table td { padding: 4px 3px; text-align: right; white-space: nowrap; }
+.metrics-table th:first-child, .metrics-table td:first-child { text-align: left; padding-left: 4px; }
+.metrics-table thead th { color: var(--muted); font-weight: 600; font-size: .62rem; border-bottom: 1px solid var(--border-strong); }
+.metrics-table thead th i { font-style: normal; color: var(--muted); opacity: .7; margin-left: 1px; }
+.metrics-table tbody td { border-bottom: 1px solid var(--border); color: var(--fg-soft); }
+.metrics-table tbody tr:last-child td { border-bottom: none; }
+.metrics-table td.best { color: var(--fg); font-weight: 700; }
+.metrics-table tr.ours td { background: rgba(251, 191, 36, .10); color: var(--fg); }
+.metrics-table tr.ours td:first-child { color: var(--gold); font-weight: 700; }
+.metrics-table tr.ours td.best { color: var(--gold); }
+.metrics-table tr.ours td:first-child { border-left: 2px solid var(--gold); padding-left: 4px; }
+.metrics-note { margin-top: 8px; color: var(--muted); font-size: .64rem; line-height: 1.4; }
+
+/* ---- viewer ------------------------------------------------------------ */
+.cmp-modebar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 12px; }
+.modebar-spacer { flex: 1; }
+.zoomlbl { color: var(--muted); font-size: .8rem; }
+
+.seg { display: inline-flex; border: 1px solid var(--border-strong); border-radius: 9px; overflow: hidden; }
+.seg button { border: 0; background: var(--card); padding: 8px 16px; cursor: pointer; font: inherit; font-size: .88rem; color: var(--fg-soft); }
+.seg button + button { border-left: 1px solid var(--border-strong); }
+.seg button:hover { color: var(--fg); }
+.seg button.active { background: var(--sky); color: #06121f; font-weight: 700; }
+
+/* stage */
+.cmp-stage {
+  position: relative; width: 100%; aspect-ratio: 1 / 1; max-height: 72vh;
+  background: #000; border-radius: 12px; overflow: hidden; user-select: none;
+  border: 1px solid var(--border); box-shadow: 0 16px 44px rgba(0, 0, 0, .5);
+}
+.cmp-stage.flip { cursor: pointer; }
+.stage-inner { position: absolute; inset: 0; transform-origin: center; will-change: transform; }
+.cmp-video {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  opacity: 0; transition: opacity .08s linear; background: #000;
+}
+.cmp-stage.loading::after {
+  content: "loading…"; position: absolute; inset: 0; display: flex; align-items: center;
+  justify-content: center; color: var(--fg-soft); font-size: .85rem; z-index: 5; pointer-events: none;
+}
+/* clip failed to load — message comes from data-err (set in compare.js) */
+.cmp-stage.errored::after {
+  content: attr(data-err); position: absolute; inset: 0; display: flex; align-items: center;
+  justify-content: center; text-align: center; padding: 0 2rem; color: var(--fg-soft);
+  font-size: .85rem; line-height: 1.5; z-index: 6; pointer-events: none;
+}
+
+/* central play overlay (shown while paused) */
+.stage-play {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 9;
+  width: 76px; height: 76px; border-radius: 50%; display: none; align-items: center; justify-content: center;
+  cursor: pointer; color: #04121c; font-size: 1.7rem; padding-left: 5px;
+  background: rgba(255, 255, 255, .92); border: none;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, .5), 0 0 0 0 rgba(56, 189, 248, .5);
+  animation: knobPulse 2.6s ease-out infinite; transition: transform .12s;
+}
+.cmp-stage.paused .stage-play { display: flex; }
+.stage-play:hover { transform: translate(-50%, -50%) scale(1.06); }
+/* while paused, suppress the flip pill / drag hint so the play button stands alone */
+.cmp-stage.paused .flip-pill, .cmp-stage.paused .drag-hint { display: none !important; }
+
+/* pane labels */
+.pane-label {
+  position: absolute; top: 10px; z-index: 6; pointer-events: none;
+  background: rgba(6, 12, 22, .72); color: #fff; font-size: .74rem; padding: 3px 10px; border-radius: 7px;
+  border: 1px solid rgba(255, 255, 255, .1);
+}
+.pane-label.left { left: 10px; }
+.pane-label.right { right: 10px; }
+.pane-label.center { left: 50%; transform: translateX(-50%); }
+/* in top/bottom mode, A stays at the top, B moves to the bottom */
+.cmp-stage.orient-h .pane-label.right { top: auto; bottom: 10px; }
+.pane-label.ours { background: rgba(251, 191, 36, .92); color: #1a1200; font-weight: 700; border-color: transparent; }
+
+/* divider (slider mode) — orientation-aware via --split, wide grab zone, gripped handle */
+.divider {
+  position: absolute; z-index: 7; display: none; background: #fff; box-shadow: 0 0 10px rgba(0, 0, 0, .65);
+  top: 0; bottom: 0; left: var(--split, 50%); width: 2px; transform: translateX(-1px);
+}
+.cmp-stage.slider .divider { display: block; }
+.cmp-stage.orient-h .divider {
+  top: var(--split, 50%); bottom: auto; left: 0; right: 0; width: auto; height: 2px; transform: translateY(-1px);
+}
+/* invisible wide hit area — no need to hit the 2px line exactly */
+.divider::before {
+  content: ""; position: absolute; top: 0; bottom: 0; left: 50%; width: 30px; transform: translateX(-50%); cursor: ew-resize;
+}
+.cmp-stage.orient-h .divider::before {
+  left: 0; right: 0; top: 50%; bottom: auto; width: auto; height: 30px; transform: translateY(-50%); cursor: ns-resize;
+}
+/* handle */
+.divider .knob {
+  position: absolute; top: 50%; left: 50%; width: 40px; height: 40px; margin: -20px 0 0 -20px;
+  border-radius: 50%; background: #fff; cursor: ew-resize; box-shadow: 0 2px 10px rgba(0, 0, 0, .6);
+  animation: knobPulse 2.4s ease-out infinite;
+}
+.cmp-stage.orient-h .divider .knob { cursor: ns-resize; }
+.cmp-stage:hover .divider .knob { animation: none; }
+.divider .knob::after {           /* grip: three short bars, rotated in horizontal */
+  content: ""; position: absolute; top: 50%; left: 50%; width: 12px; height: 16px; transform: translate(-50%, -50%);
+  background: repeating-linear-gradient(90deg, #6b7688 0 2px, transparent 2px 5px);
+}
+.cmp-stage.orient-h .divider .knob::after { transform: translate(-50%, -50%) rotate(90deg); }
+@keyframes knobPulse {
+  0%   { box-shadow: 0 2px 10px rgba(0, 0, 0, .6), 0 0 0 0 rgba(56, 189, 248, .55); }
+  70%  { box-shadow: 0 2px 10px rgba(0, 0, 0, .6), 0 0 0 14px rgba(56, 189, 248, 0); }
+  100% { box-shadow: 0 2px 10px rgba(0, 0, 0, .6), 0 0 0 0 rgba(56, 189, 248, 0); }
+}
+@media (prefers-reduced-motion: reduce) { .divider .knob { animation: none; } }
+
+/* one-time "drag to compare" hint */
+.drag-hint {
+  position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); z-index: 8; display: none;
+  background: rgba(56, 189, 248, .94); color: #04121c; font-weight: 700; font-size: .74rem;
+  padding: 5px 13px; border-radius: 999px; box-shadow: 0 4px 14px rgba(0, 0, 0, .45); pointer-events: none;
+}
+.cmp-stage.slider .drag-hint { display: inline-block; }
+.drag-hint.hidden { display: none !important; }
+
+/* split control */
+.split-label { color: var(--muted); font-family: var(--font-display); font-size: .82rem; align-self: center; }
+.cmp .orient-only { display: none; }
+.cmp.mode-slider .orient-only { display: inline-flex; }
+.cmp.mode-slider .split-label.orient-only { display: inline; }
+
+/* flip pill */
+.flip-pill {
+  position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); z-index: 7;
+  background: rgba(10, 14, 22, .88); color: #fff; border: 1px solid rgba(255, 255, 255, .18);
+  padding: 8px 16px; border-radius: 999px; font: inherit; font-size: .8rem; cursor: pointer; display: none;
+  white-space: nowrap; max-width: 94%; overflow: hidden; text-overflow: ellipsis;
+  backdrop-filter: blur(4px);
+}
+.cmp-stage.flip .flip-pill { display: inline-block; }
+.flip-pill b { color: var(--gold); }
+
+/* transport */
+.cmp-transport { display: flex; align-items: center; gap: 10px; margin: 14px 0; }
+.cmp-transport button {
+  border: 1px solid var(--border-strong); background: var(--card); min-width: 36px; height: 34px;
+  border-radius: 8px; cursor: pointer; font-size: .82rem; color: var(--fg-soft);
+}
+.cmp-transport button:hover { border-color: var(--sky); color: var(--fg); }
+.cmp-transport input[type="range"] { flex: 1; accent-color: var(--sky); }
+.tlabel { color: var(--muted); font-size: .78rem; font-variant-numeric: tabular-nums; min-width: 44px; text-align: right; }
+
+/* method chooser — shared 2-column grid so the A/B labels sit tight against the
+   chips (no big gap in Flip) and both rows align, sized to the widest label
+   (so "Bottom / B" never wraps to two lines) */
+.chooser { display: grid; grid-template-columns: auto 1fr; gap: 9px 12px; align-items: center; }
+.chooser-row { display: contents; }
+.chooser-row .side {
+  white-space: nowrap; font-weight: 700; font-size: .76rem; letter-spacing: .04em;
+  text-transform: uppercase; color: var(--muted); text-align: right;
+}
+.chooser-row .chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.chip {
+  border: 1px solid var(--border-strong); background: var(--card); border-radius: 999px;
+  padding: 5px 10px; cursor: pointer; font: inherit; font-size: .78rem; color: var(--fg-soft);
+  transition: border-color .12s, color .12s; white-space: nowrap;
+}
+.chip:hover { border-color: var(--sky); color: var(--fg); }
+.chip.ours::before { content: "\2605 "; color: var(--gold); }
+.row-A .chip.sel { background: var(--sky); color: #06121f; border-color: transparent; font-weight: 700; }
+.row-B .chip.sel { background: var(--teal); color: #06121f; border-color: transparent; font-weight: 700; }
+.row-A .chip.sel.ours::before,
+.row-B .chip.sel.ours::before { color: #3a2c00; }
+
+.metaline { color: var(--muted); font-size: .8rem; margin-top: 16px; }

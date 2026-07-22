@@ -1,0 +1,5 @@
+# PHASE 1 (under review): block all crawlers so the page stays unlisted.
+# PHASE 2 (after acceptance): change to "Allow: /" (or delete this file)
+# to let search engines index the page.
+User-agent: *
+Disallow: /

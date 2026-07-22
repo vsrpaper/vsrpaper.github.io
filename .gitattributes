@@ -1,0 +1,11 @@
+# Normalize line endings in the repo; stops Windows checkouts showing every
+# text file as modified (robots.txt was doing exactly this).
+* text=auto
+
+# Never let CRLF conversion touch binaries or SVG.
+*.svg   text eol=lf
+*.mp4   binary
+*.jpg   binary
+*.png   binary
+*.webp  binary
+*.woff2 binary

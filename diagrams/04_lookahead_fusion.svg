@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 760" font-family="Inter, 'Segoe UI', system-ui, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b1220"/><stop offset="1" stop-color="#0f1a2e"/></linearGradient>
+    <linearGradient id="accentbar" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#a78bfa"/><stop offset=".5" stop-color="#2dd4bf"/><stop offset="1" stop-color="#38bdf8"/></linearGradient>
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#000000" flood-opacity="0.55"/></filter>
+    <marker id="arS" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#94a3b8"/></marker>
+    <marker id="arT" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#2dd4bf"/></marker>
+    <marker id="arV" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#a78bfa"/></marker>
+    <marker id="arK" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#38bdf8"/></marker>
+  </defs>
+  <style>
+    .title{font-size:28px;font-weight:800;fill:#f1f5f9}
+    .sub{font-size:14px;fill:#94a3b8}
+    .mod{font-size:16px;font-weight:700}
+    .sym{font-size:13px;fill:#cbd5e1}
+    .note{font-size:11.5px;fill:#8ea3bd}
+    .ten{font-size:12px;fill:#b6c6db;font-style:italic}
+    .sec{font-size:13px;font-weight:700;letter-spacing:.6px}
+  </style>
+  <rect width="1280" height="760" fill="url(#bg)"/>
+  <rect x="0" y="0" width="1280" height="5" fill="url(#accentbar)"/>
+  <text class="title" x="40" y="50">Recurrent Backbone &amp; Look-Ahead Fusion</text>
+  <text class="sub" x="41" y="72">The backbone runs causally; reconstruction targets the oldest (anchor) frame in a K+1 window, so each output draws on K already-observed future frames plus the full causal past.</text>
+
+  <!-- timeline of hidden states -->
+  <text class="sec" x="40" y="126" fill="#5eead4">CAUSAL RECURRENCE  &#8212;  hidden states h&#8348;&#8331;&#8342; &#8230; h&#8348;</text>
+  <g>
+    <!-- anchor -->
+    <g filter="url(#sh)"><rect x="60" y="150" width="120" height="80" rx="12" fill="#173a3a" stroke="#2dd4bf" stroke-width="2.8"/></g>
+    <text class="mod" x="120" y="182" text-anchor="middle" fill="#5eead4">h&#8348;&#8331;&#8342;</text>
+    <text class="note" x="120" y="202" text-anchor="middle" fill="#5eead4">ANCHOR</text>
+    <text class="note" x="120" y="218" text-anchor="middle">x&#8348;&#8331;&#8342; (oldest)</text>
+
+    <g filter="url(#sh)"><rect x="230" y="160" width="110" height="60" rx="11" fill="#152238" stroke="#2dd4bf" stroke-width="2"/></g>
+    <text class="mod" x="285" y="196" text-anchor="middle" fill="#5eead4">h&#8348;&#8331;&#8342;&#8330;&#8321;</text>
+    <g filter="url(#sh)"><rect x="390" y="160" width="110" height="60" rx="11" fill="#152238" stroke="#2dd4bf" stroke-width="2"/></g>
+    <text class="mod" x="445" y="196" text-anchor="middle" fill="#5eead4">&#8230;</text>
+    <g filter="url(#sh)"><rect x="550" y="160" width="110" height="60" rx="11" fill="#152238" stroke="#2dd4bf" stroke-width="2"/></g>
+    <text class="mod" x="605" y="196" text-anchor="middle" fill="#5eead4">h&#8348;</text>
+    <text class="note" x="605" y="240" text-anchor="middle">newest</text>
+
+    <line x1="180" y1="190" x2="228" y2="190" stroke="#2dd4bf" stroke-width="2" marker-end="url(#arT)"/>
+    <line x1="340" y1="190" x2="388" y2="190" stroke="#2dd4bf" stroke-width="2" marker-end="url(#arT)"/>
+    <line x1="500" y1="190" x2="548" y2="190" stroke="#2dd4bf" stroke-width="2" marker-end="url(#arT)"/>
+    <text class="ten" x="360" y="150" text-anchor="middle" fill="#94a3b8">window K+1</text>
+    <path d="M60,240 L60,270 L660,270 L660,225" fill="none" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 4"/>
+    <text class="note" x="360" y="286" text-anchor="middle">all future states aligned back to the anchor</text>
+  </g>
+
+  <!-- Synthesis operator S -->
+  <g filter="url(#sh)"><rect x="740" y="130" width="240" height="180" rx="14" fill="#141024" stroke="#a78bfa" stroke-width="2.5"/></g>
+  <text class="mod" x="860" y="162" text-anchor="middle" fill="#c4b5fd">Look-Ahead Fusion  &#119982;</text>
+  <line x1="760" y1="174" x2="960" y2="174" stroke="#3a2d5c"/>
+  <text class="note" x="760" y="196" fill="#c9bcf0">flow anchor&#8594;each future frame:</text>
+  <text class="sym" x="760" y="216">f&#8348;&#8331;&#8342;&#8594;&#11388;</text>
+  <text class="note" x="760" y="242" fill="#c9bcf0">1&#160; flow-initialized deformable align</text>
+  <text class="note" x="760" y="264" fill="#c9bcf0">2&#160; temporal&#8211;spatial attention</text>
+  <text class="note" x="760" y="286" fill="#c9bcf0">&#160;&#160;&#160;(suppresses occluded matches)</text>
+  <text class="sym" x="860" y="306" text-anchor="middle">&#8594; h&#772;&#8348;&#8331;&#8342;</text>
+
+  <!-- future states into S -->
+  <path d="M285,220 L285,340 L740,220" fill="none" stroke="#a78bfa" stroke-width="1.6" marker-end="url(#arV)"/>
+  <path d="M605,220 L605,330 L738,235" fill="none" stroke="#a78bfa" stroke-width="1.6" marker-end="url(#arV)"/>
+  <text class="ten" x="500" y="356" text-anchor="middle" fill="#c4b5fd">{ h&#11388; }  future hidden states</text>
+
+  <!-- R2 refine -->
+  <g filter="url(#sh)"><rect x="740" y="380" width="240" height="100" rx="13" fill="#152238" stroke="#2dd4bf" stroke-width="2"/></g>
+  <text class="mod" x="860" y="414" text-anchor="middle" fill="#5eead4">Anchor Refine  R&#8322;</text>
+  <text class="sym" x="860" y="438" text-anchor="middle">h&#8242;&#8348;&#8331;&#8342; = R&#8322;([x&#8348;&#8331;&#8342;, p&#772;&#8348;&#8331;&#8342;, h&#772;&#8348;&#8331;&#8342;])</text>
+  <text class="note" x="860" y="458" text-anchor="middle">preserve anchor content + fuse future info</text>
+  <line x1="860" y1="310" x2="860" y2="378" stroke="#a78bfa" stroke-width="2" marker-end="url(#arV)"/>
+  <text class="ten" x="880" y="348" fill="#c4b5fd">h&#772;&#8348;&#8331;&#8342;</text>
+
+  <!-- residual D -->
+  <g filter="url(#sh)"><rect x="470" y="440" width="220" height="110" rx="13" fill="#101c30" stroke="#38bdf8" stroke-width="2.3"/></g>
+  <text class="mod" x="580" y="476" text-anchor="middle" fill="#7dd3fc">Residual Detail  &#119967;</text>
+  <text class="sym" x="580" y="502" text-anchor="middle">r&#8348;&#8331;&#8342; = &#119967;([h&#8242;&#8348;&#8331;&#8342;, h&#8348;&#8331;&#8342;])</text>
+  <text class="note" x="580" y="524" text-anchor="middle">high-frequency correction from</text>
+  <text class="note" x="580" y="540" text-anchor="middle">multi-frame consensus, not one frame</text>
+
+  <path d="M740,455 L710,480 L692,485" fill="none" stroke="#2dd4bf" stroke-width="2" marker-end="url(#arT)"/>
+  <text class="ten" x="720" y="450" fill="#5eead4">h&#8242;&#8348;&#8331;&#8342;</text>
+  <path d="M120,230 L120,495 L468,495" fill="none" stroke="#2dd4bf" stroke-width="1.8" marker-end="url(#arT)"/>
+  <text class="ten" x="300" y="488" text-anchor="middle" fill="#5eead4">anchor state h&#8348;&#8331;&#8342;</text>
+
+  <!-- output to upsampler -->
+  <g filter="url(#sh)"><rect x="470" y="600" width="220" height="70" rx="12" fill="#1c1608" stroke="#fbbf24" stroke-width="2"/></g>
+  <text class="mod" x="580" y="632" text-anchor="middle" fill="#fcd34d">&#8594; to Continuous Upsampler</text>
+  <text class="sym" x="580" y="654" text-anchor="middle">residual r&#8348;&#8331;&#8342;</text>
+  <line x1="580" y1="550" x2="580" y2="598" stroke="#fbbf24" stroke-width="2" marker-end="url(#arS)"/>
+
+  <!-- callout (moved right so it no longer sits on the anchor-state wire) -->
+  <g filter="url(#sh)"><rect x="740" y="520" width="440" height="150" rx="14" fill="#141024" stroke="#a78bfa" stroke-width="1.6" stroke-dasharray="6 4"/></g>
+  <text class="mod" x="762" y="550" fill="#c4b5fd">Why reconstruct the oldest frame?</text>
+  <text class="note" x="762" y="576" fill="#a9b7cd">The backbone is causal (past only). By delaying the output</text>
+  <text class="note" x="762" y="594" fill="#a9b7cd">to the anchor x&#8348;&#8331;&#8342;, each reconstructed frame also sees K real</text>
+  <text class="note" x="762" y="612" fill="#a9b7cd">future frames &#8212; bidirectional context without a non-causal</text>
+  <text class="note" x="762" y="630" fill="#a9b7cd">backbone.</text>
+  <text class="note" x="762" y="654" fill="#c4b5fd">Occlusions handled by attention, not blind warping.</text>
+
+  <text class="note" x="1240" y="720" text-anchor="end">Ctrl-Plus-8K &#183; look-ahead fusion (detail 3 of 4)</text>
+</svg>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- ============================================================= -->
+  <!-- PHASE 1 (under review): keep the page out of search engines.  -->
+  <!-- After acceptance, DELETE the next line to allow indexing.     -->
+  <meta name="robots" content="noindex, nofollow">
+  <!-- ============================================================= -->
+
+  <title>Ctrl-Plus-8K — Anonymous Submission</title>
+  <link rel="icon" href="static/icon.svg" type="image/svg+xml">
+
+  <!-- Comparison clips are GitHub Release assets; warm the TLS handshake to both the
+       release host and the object store it redirects to, before the first click. -->
+  <link rel="preconnect" href="https://github.com" crossorigin>
+  <link rel="preconnect" href="https://objects.githubusercontent.com" crossorigin>
+
+  <link rel="stylesheet" href="static/style.css">
+  <link rel="stylesheet" href="static/compare.css">
+  <!-- fonts load async (they use font-display: swap) so the ~94 KB embedded blob
+       never blocks first paint; text renders in the fallback then swaps. -->
+  <link rel="stylesheet" href="static/fonts.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="static/fonts.css"></noscript>
+</head>
+
+<body>
+
+  <!-- ambient aurora glow (decorative) -->
+  <div class="bg-aurora" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+
+  <!-- floating side-nav (dot rail) — tracks the active section -->
+  <nav class="sidenav" aria-label="Section navigation">
+    <a href="#hero"     data-label="Top"><span class="d"></span></a>
+    <a href="#tldr"     data-label="TL;DR"><span class="d"></span></a>
+    <a href="#abstract" data-label="Abstract"><span class="d"></span></a>
+    <a href="#results"  data-label="Comparisons"><span class="d"></span></a>
+    <a href="#method"   data-label="Method"><span class="d"></span></a>
+  </nav>
+
+  <!-- ===================== HERO ===================== -->
+  <header class="hero" id="hero">
+    <div class="container">
+      <span class="eyebrow">WACV 2027</span>
+      <h1 class="title">
+        <span class="title-name">Ctrl-Plus-8K</span>
+        <span class="title-sub">Extreme-Scale Video Super-Resolution at Native 8K</span>
+      </h1>
+
+      <!-- PHASE 1: anonymous. After acceptance, replace with the AUTHOR block below. -->
+      <p class="authors">Anonymous Submission</p>
+      <p class="venue">Paper ID: XXXX &middot; Under Review</p>
+
+      <!--
+        ============ PHASE 2 (after acceptance) AUTHOR BLOCK ============
+        <p class="authors">
+          <a href="#">First Author</a><sup>1</sup>,
+          <a href="#">Second Author</a><sup>1,2</sup>,
+          <a href="#">Third Author</a><sup>2</sup>
+        </p>
+        <p class="affiliations"><sup>1</sup>Institution A &nbsp; <sup>2</sup>Institution B</p>
+        ================================================================
+      -->
+
+      <div class="buttons">
+        <a class="button" href="#">Paper (PDF)</a>
+        <a class="button ghost" href="#results">See Comparisons</a>
+
+        <!-- ===== PHASE 2 action buttons — enable AFTER acceptance ======
+             (arXiv / Code de-anonymize you; keep them commented during review)
+        <a class="button ghost" href="#">Supplementary</a>
+        <a class="button ghost" href="#">arXiv</a>
+        <a class="button ghost" href="#">Code</a>
+        <a class="button ghost" href="#">Demo</a>
+        ============================================================= -->
+      </div>
+    </div>
+  </header>
+
+  <!-- ===================== TL;DR ===================== -->
+  <section class="section" id="tldr">
+    <div class="container narrow">
+      <div class="tldr-card glass reveal">
+        <span class="tldr-badge">TL;DR</span>
+        <p>We introduce the first extreme, arbitrary-scale video super-resolution framework for native 8K. Because standard methods fail at extreme magnifications, we utilize a degradation-robust flow estimator, task-aligned priors, and continuous grid reconstruction. Our framework outperforms eight baselines in perceptual quality while remaining the most compact model, maintaining a constant per-frame cost across all scale factors.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ABSTRACT ===================== -->
+  <section class="section" id="abstract">
+    <div class="container narrow">
+      <div class="section-head reveal"><span class="eyebrow">Overview</span><h2>Abstract</h2></div>
+      <p class="abstract reveal">
+ While 8K displays are mainstream, current video super-resolution (VSR) methods fail at native 8K because optical flow collapses and perceptual priors hallucinate textures under extreme magnification. We present the first arbitrary-scale VSR framework designed specifically for native 8K. To overcome these failures, our method combines tile-based recurrent processing with clip-level guidance, conditioned on a degradation-robust flow estimator and a task-aligned structural prior. By predicting a continuous-grid kernel once per clip, arbitrary-scale upsampling incurs nearly zero per-frame cost. Across two 8K benchmarks, our highly compact model outperforms eight state-of-the-art baselines, survives a &#215;64 stress test, and generalizes to real-world video without adaptation. 
+      </p>
+    </div>
+  </section>
+
+  <!-- ===================== INTERACTIVE COMPARISONS (videos first) ===================== -->
+  <section class="section" id="results">
+    <div class="container wide">
+      <div class="section-head reveal">
+        <span class="eyebrow">Results</span>
+        <h2>Interactive 8K Comparisons</h2>
+        <p class="lead">Pick a dataset, click a highlighted region of the 8K frame, then compare every
+          method on that crop. Choose <strong>Flip</strong> to toggle two methods in place, or
+          <strong>Slider</strong> to split them left/right or top/bottom. Zoom for detail; step
+          frame-by-frame for temporal artifacts.</p>
+      </div>
+
+      <div class="cmp glass" id="cmp"><!-- viewer is built by static/compare.js --></div>
+    </div>
+  </section>
+
+  <!-- ===================== METHOD (seamless diagram narrative) ===================== -->
+  <section class="section" id="method">
+    <div class="container wide">
+      <div class="section-head reveal">
+        <span class="eyebrow">How it works</span>
+        <h2>Method</h2>
+        <p class="lead">A walkthrough of the framework: how a full 8K frame is processed as fixed tiles,
+          conditioned on robust motion and a task-aligned prior, and reconstructed at any scale with a
+          kernel predicted once per clip. The two failures that break standard VSR at 8K are isolated at the end.</p>
+      </div>
+
+      <div class="method-flow">
+        <div class="diagram-block reveal">
+          <img src="diagrams/01_overview.svg" alt="End-to-end overview of Ctrl-Plus-8K" loading="lazy" width="1280" height="790">
+          <p class="diagram-cap"><span class="step">01 · Overview</span>
+            The full pipeline. A downscaled 8K clip is split into fixed 512-px tiles; a recurrent backbone,
+            conditioned on flow and a super-resolution prior, feeds a continuous-scale upsampler, and the
+            loss is applied on the re-stitched crop rather than on isolated tiles.</p>
+        </div>
+
+        <div class="diagram-block reveal">
+          <img src="diagrams/02_tiling_supervision.svg" alt="Tile-based processing and stitched supervision" loading="lazy" width="1280" height="760">
+          <p class="diagram-cap"><span class="step">02 · Tiling</span>
+            Why the tiles do not tear. The network always runs on fixed 512-px tiles for constant memory,
+            but training supervises the re-assembled crop with a clip-level guidance term that restores the
+            long-range and temporal context per-tile processing discards, keeping the 8K output seamless.</p>
+        </div>
+
+        <div class="diagram-block reveal">
+          <img src="diagrams/03_conditioning.svg" alt="Conditioning the recurrence: robust flow and SuperPrior" loading="lazy" width="1280" height="760">
+          <p class="diagram-cap"><span class="step">03 · Conditioning</span>
+            Conditioning the recurrence. At extreme downscaling the low-res input barely constrains the
+            output, so every recurrent update is fed two frozen conditioners: a degradation-robust flow
+            estimator for stable motion, and a task-aligned super-resolution prior for geometry.</p>
+        </div>
+
+        <div class="diagram-block reveal">
+          <img src="diagrams/04_lookahead_fusion.svg" alt="Recurrent backbone and look-ahead fusion" loading="lazy" width="1280" height="760">
+          <p class="diagram-cap"><span class="step">04 · Look-Ahead</span>
+            Bidirectional context from a causal backbone. Each output targets the oldest frame in a K+1
+            window, so it also sees K already-observed future frames without an anti-causal pass, with
+            occlusions resolved by attention rather than blind warping.</p>
+        </div>
+
+        <div class="diagram-block reveal">
+          <img src="diagrams/05_shared_kernel_upsampler.svg" alt="Shared continuous-kernel upsampler" loading="lazy" width="1280" height="760">
+          <p class="diagram-cap"><span class="step">05 · Upsampler</span>
+            Arbitrary scale, almost free. The upsampling kernel is predicted once per clip and shared across
+            frames, while per-frame residuals add the detail, so non-integer and extreme scale factors add
+            almost no per-frame cost.</p>
+        </div>
+
+        <div class="diagram-block reveal">
+          <img src="diagrams/06_why_it_works.svg" alt="Why it works: robust flow and task-aligned prior" loading="lazy" width="1280" height="1060">
+          <p class="diagram-cap"><span class="step">06 · Why it works</span>
+            The two failures we fix. On two independent 8K datasets, off-the-shelf flow collapses and
+            propagates catastrophic motion errors, and high-level texture priors actively mislead; adapting
+            the flow and using a task-aligned prior removes both, and the gap widens as scale grows.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== BIBTEX (Phase 2) ===================== -->
+  <!--
+    Uncomment after acceptance.
+  <section class="section" id="bibtex">
+    <div class="container narrow">
+      <div class="section-head"><span class="eyebrow">Cite</span><h2>BibTeX</h2></div>
+      <pre class="bibtex">@inproceedings{yourkey2026,
+  title     = {Your Paper Title},
+  author    = {Author, First and Author, Second},
+  booktitle = {CVPR},
+  year      = {2026}
+}</pre>
+    </div>
+  </section>
+  -->
+
+  <footer class="footer">
+    <div class="container">
+      <p>Anonymous project page &middot; content is under review.</p>
+    </div>
+  </footer>
+
+  <script src="static/site.js"></script>
+  <script src="static/compare.js"></script>
+</body>
+</html>
