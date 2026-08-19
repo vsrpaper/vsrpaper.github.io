@@ -1,0 +1,213 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 790" font-family="Inter, 'Segoe UI', system-ui, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="1" stop-color="#0f1a2e"/>
+    </linearGradient>
+    <linearGradient id="accentbar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#2dd4bf"/>
+      <stop offset=".5" stop-color="#38bdf8"/>
+      <stop offset="1" stop-color="#a78bfa"/>
+    </linearGradient>
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#000000" flood-opacity="0.55"/>
+    </filter>
+    <marker id="arS" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#94a3b8"/></marker>
+    <marker id="arT" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#2dd4bf"/></marker>
+    <marker id="arA" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#fbbf24"/></marker>
+    <marker id="arR" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#fb7185"/></marker>
+    <marker id="arV" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#a78bfa"/></marker>
+    <marker id="arK" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#38bdf8"/></marker>
+  </defs>
+  <style>
+    .title{font-size:32px;font-weight:800;fill:#f1f5f9}
+    .sub{font-size:15px;fill:#94a3b8}
+    .mod{font-size:16px;font-weight:700}
+    .modS{font-size:14px;font-weight:700}
+    .sym{font-size:13px;fill:#cbd5e1}
+    .note{font-size:11.5px;fill:#8ea3bd}
+    .ten{font-size:12px;fill:#b6c6db;font-style:italic}
+    .lg{font-size:12px;fill:#cbd5e1}
+    .badge{font-size:10.5px;font-weight:700;fill:#0b1220}
+    .sec{font-size:13px;font-weight:700;fill:#fda4af;letter-spacing:.5px}
+  </style>
+
+  <rect width="1280" height="790" fill="url(#bg)"/>
+  <rect x="0" y="0" width="1280" height="5" fill="url(#accentbar)"/>
+
+  <!-- Header -->
+  <text class="title" x="40" y="52">Ctrl-Plus-8K</text>
+  <text class="sub" x="41" y="74">Arbitrary-scale video super-resolution at native 8K — end-to-end overview</text>
+
+  <!-- Legend -->
+  <g transform="translate(970,30)">
+    <rect x="0" y="0" width="300" height="70" rx="10" fill="#111c30" stroke="#26374f"/>
+    <rect x="14" y="14" width="22" height="12" rx="3" fill="#152238" stroke="#2dd4bf" stroke-width="2"/>
+    <text class="lg" x="44" y="24">trainable module</text>
+    <rect x="14" y="34" width="22" height="12" rx="3" fill="#0f2033" stroke="#38bdf8" stroke-width="2" stroke-dasharray="5 3"/>
+    <text class="lg" x="44" y="44">frozen module</text>
+    <text x="26" y="45" font-size="12" fill="#7dd3fc" text-anchor="middle">*</text>
+    <rect x="150" y="34" width="22" height="12" rx="3" fill="#241320" stroke="#fb7185" stroke-width="2" stroke-dasharray="5 3"/>
+    <text class="lg" x="180" y="44">training only</text>
+    <text class="note" x="14" y="62">* frozen = weights not updated in the main SR training</text>
+  </g>
+
+  <!-- ================= CONDITIONERS (top) ================= -->
+  <!-- Degradation-robust flow -->
+  <g filter="url(#sh)">
+    <rect x="342" y="118" width="220" height="70" rx="13" fill="#0f2033" stroke="#38bdf8" stroke-width="2" stroke-dasharray="6 4"/>
+  </g>
+  <circle cx="546" cy="132" r="9" fill="#38bdf8"/><text class="badge" x="546" y="136" text-anchor="middle">*</text>
+  <text class="modS" x="360" y="143" fill="#7dd3fc">Degradation-Robust Flow</text>
+  <text class="sym" x="360" y="162">f&#8348;&#8331;&#8321;&#8594;&#8348; = Flow(x&#8348;, x&#8348;&#8331;&#8321;)</text>
+  <text class="note" x="360" y="179">RPKNet &#183; self-supervised adaptation</text>
+
+  <!-- Arbitrary-scale kernel -->
+  <g filter="url(#sh)">
+    <rect x="838" y="118" width="212" height="70" rx="13" fill="#152238" stroke="#fbbf24" stroke-width="2"/>
+  </g>
+  <text class="modS" x="856" y="143" fill="#fcd34d">Arbitrary-Scale Kernel  &#119974;&#119979;</text>
+  <text class="sym" x="856" y="162">w = KP(h&#8320;, C, u)</text>
+  <text class="note" x="856" y="179">predicted once per clip &#183; grid (C, u)</text>
+
+  <!-- ================= MAIN SPINE ================= -->
+  <!-- Input -->
+  <g filter="url(#sh)">
+    <rect x="40" y="228" width="150" height="96" rx="14" fill="#14263a" stroke="#34d399" stroke-width="2"/>
+  </g>
+  <text class="mod" x="115" y="268" text-anchor="middle" fill="#6ee7b7">LR clip</text>
+  <text class="sym" x="115" y="290" text-anchor="middle">{ x&#8348; }</text>
+  <text class="note" x="115" y="309" text-anchor="middle">downscaled &#215;16 / &#215;64</text>
+
+  <!-- Tiling -->
+  <g filter="url(#sh)">
+    <rect x="250" y="228" width="150" height="96" rx="14" fill="#152238" stroke="#2dd4bf" stroke-width="2"/>
+  </g>
+  <text class="mod" x="325" y="268" text-anchor="middle" fill="#5eead4">Tiling</text>
+  <text class="sym" x="325" y="290" text-anchor="middle">512 &#215; 512 tiles</text>
+  <text class="note" x="325" y="309" text-anchor="middle">fixed working resolution</text>
+
+  <!-- Recurrent backbone -->
+  <g filter="url(#sh)">
+    <rect x="460" y="228" width="180" height="96" rx="14" fill="#152238" stroke="#2dd4bf" stroke-width="2.5"/>
+  </g>
+  <text class="mod" x="550" y="262" text-anchor="middle" fill="#5eead4">Recurrent Backbone</text>
+  <text class="sym" x="550" y="284" text-anchor="middle">h&#8348; = R([x&#8348;, p&#772;&#8348;, h&#771;&#8348;&#8331;&#8321;])</text>
+  <text class="note" x="550" y="303" text-anchor="middle">causal hidden-state propagation</text>
+
+  <!-- Look-ahead fusion -->
+  <g filter="url(#sh)">
+    <rect x="700" y="228" width="180" height="96" rx="14" fill="#152238" stroke="#a78bfa" stroke-width="2"/>
+  </g>
+  <text class="mod" x="790" y="260" text-anchor="middle" fill="#c4b5fd">Look-Ahead Fusion</text>
+  <text class="sym" x="790" y="281" text-anchor="middle">&#119982; : window K+1 &#8594; anchor x&#8348;&#8331;&#8342;</text>
+  <text class="note" x="790" y="300" text-anchor="middle">deformable align + attention</text>
+  <text class="note" x="790" y="315" text-anchor="middle">residual r&#8348;&#8331;&#8342; = &#119967;(&#183;)</text>
+
+  <!-- Upsampler -->
+  <g filter="url(#sh)">
+    <rect x="940" y="228" width="150" height="96" rx="14" fill="#152238" stroke="#fbbf24" stroke-width="2"/>
+  </g>
+  <text class="mod" x="1015" y="264" text-anchor="middle" fill="#fcd34d">Continuous</text>
+  <text class="mod" x="1015" y="283" text-anchor="middle" fill="#fcd34d">Upsampler &#119984;&#119979;</text>
+  <text class="sym" x="1015" y="304" text-anchor="middle">&#375;&#8348;&#8331;&#8342; = UP(r&#8348;&#8331;&#8342;, w, C, x&#8348;&#8331;&#8342;)</text>
+
+  <!-- Output -->
+  <g filter="url(#sh)">
+    <rect x="1150" y="228" width="100" height="96" rx="14" fill="#14263a" stroke="#34d399" stroke-width="2"/>
+  </g>
+  <text class="mod" x="1200" y="264" text-anchor="middle" fill="#6ee7b7">8K SR</text>
+  <text class="sym" x="1200" y="286" text-anchor="middle">{ &#375;&#8348; }</text>
+  <text class="note" x="1200" y="305" text-anchor="middle">re-assembled</text>
+
+  <!-- spine arrows -->
+  <line x1="190" y1="276" x2="248" y2="276" stroke="#94a3b8" stroke-width="2" marker-end="url(#arS)"/>
+  <text class="ten" x="219" y="268" text-anchor="middle">{x&#8348;}</text>
+  <line x1="400" y1="276" x2="458" y2="276" stroke="#94a3b8" stroke-width="2" marker-end="url(#arS)"/>
+  <text class="ten" x="429" y="268" text-anchor="middle">tiles</text>
+  <line x1="640" y1="276" x2="698" y2="276" stroke="#2dd4bf" stroke-width="2" marker-end="url(#arT)"/>
+  <text class="ten" x="669" y="268" text-anchor="middle">h&#8348;</text>
+  <line x1="880" y1="276" x2="938" y2="276" stroke="#a78bfa" stroke-width="2" marker-end="url(#arV)"/>
+  <text class="ten" x="909" y="268" text-anchor="middle">r&#8348;&#8331;&#8342;</text>
+  <line x1="1090" y1="276" x2="1148" y2="276" stroke="#fbbf24" stroke-width="2" marker-end="url(#arA)"/>
+
+  <!-- flow arrow into backbone -->
+  <line x1="470" y1="188" x2="512" y2="226" stroke="#38bdf8" stroke-width="2" marker-end="url(#arK)"/>
+  <text class="ten" x="452" y="214" text-anchor="end" fill="#7dd3fc">h&#771;&#8348;&#8331;&#8321;</text>
+
+  <!-- SuperPrior (bottom) -->
+  <g filter="url(#sh)">
+    <rect x="445" y="372" width="214" height="66" rx="13" fill="#0f1830" stroke="#a78bfa" stroke-width="2" stroke-dasharray="6 4"/>
+  </g>
+  <circle cx="643" cy="386" r="9" fill="#a78bfa"/><text class="badge" x="643" y="390" text-anchor="middle">*</text>
+  <text class="modS" x="460" y="398" fill="#c4b5fd">Task-Aligned SuperPrior</text>
+  <text class="sym" x="460" y="416">p&#772;&#8348; = &#936;(&#934;(x&#8348;))</text>
+  <text class="note" x="460" y="432">frozen EDSR + 1&#215;1 proj &#936;</text>
+  <line x1="552" y1="372" x2="552" y2="326" stroke="#a78bfa" stroke-width="2" marker-end="url(#arV)"/>
+  <text class="ten" x="564" y="352" fill="#c4b5fd">p&#772;&#8348;</text>
+
+  <!-- kernel feeds -->
+  <path d="M600,232 C700,196 760,190 838,166" fill="none" stroke="#38bdf8" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#arK)"/>
+  <text class="ten" x="700" y="196" text-anchor="middle" fill="#7dd3fc">h&#8320; (once/clip)</text>
+  <line x1="944" y1="188" x2="1000" y2="226" stroke="#fbbf24" stroke-width="2" marker-end="url(#arA)"/>
+  <text class="ten" x="978" y="214" fill="#fcd34d">w</text>
+
+  <!-- recurrence self loop under backbone -->
+  <path d="M470,324 C440,360 440,300 468,300" fill="none" stroke="#2dd4bf" stroke-width="1.6" stroke-dasharray="4 3" marker-end="url(#arT)"/>
+  <text class="note" x="428" y="345" text-anchor="middle" fill="#5eead4">recurrence</text>
+
+  <!-- ================= TRAINING BAND ================= -->
+  <rect x="40" y="500" width="1210" height="256" rx="16" fill="#160f18" stroke="#fb7185" stroke-width="1.6" stroke-dasharray="8 5" opacity="0.95"/>
+  <text class="sec" x="62" y="526">TRAINING-ONLY SUPERVISION</text>
+  <text class="note" x="270" y="526" fill="#c98a97">loss is evaluated on the re-stitched full-resolution crop, not on isolated tiles</text>
+
+  <!-- SR tiles -->
+  <g filter="url(#sh)"><rect x="70" y="568" width="180" height="150" rx="13" fill="#1b1420" stroke="#fb7185" stroke-width="2"/></g>
+  <text class="mod" x="160" y="606" text-anchor="middle" fill="#fda4af">Four SR tiles</text>
+  <g transform="translate(112,626)">
+    <rect x="0" y="0" width="34" height="34" fill="#2b1a24" stroke="#fb7185"/><rect x="34" y="0" width="34" height="34" fill="#2b1a24" stroke="#fb7185"/>
+    <rect x="0" y="34" width="34" height="34" fill="#2b1a24" stroke="#fb7185"/><rect x="34" y="34" width="34" height="34" fill="#2b1a24" stroke="#fb7185"/>
+  </g>
+  <text class="note" x="160" y="706" text-anchor="middle">each 512&#215;512</text>
+
+  <!-- stitch -->
+  <g filter="url(#sh)"><rect x="300" y="588" width="200" height="110" rx="13" fill="#1b1420" stroke="#fb7185" stroke-width="2"/></g>
+  <text class="mod" x="400" y="630" text-anchor="middle" fill="#fda4af">2&#215;2 Tile Stitch</text>
+  <text class="sym" x="400" y="652" text-anchor="middle">&#375; &#8594; Y&#770; (1024&#178;)</text>
+  <text class="note" x="400" y="672" text-anchor="middle">gradients cross tile seams</text>
+
+  <!-- charbonnier -->
+  <g filter="url(#sh)"><rect x="550" y="564" width="200" height="72" rx="12" fill="#1b1420" stroke="#fb7185" stroke-width="2"/></g>
+  <text class="mod" x="650" y="594" text-anchor="middle" fill="#fda4af">Charbonnier</text>
+  <text class="sym" x="650" y="616" text-anchor="middle">&#8466;_char (pixel)</text>
+
+  <!-- x3d guidance -->
+  <g filter="url(#sh)"><rect x="550" y="650" width="200" height="72" rx="12" fill="#0f1830" stroke="#38bdf8" stroke-width="2" stroke-dasharray="6 4"/></g>
+  <circle cx="734" cy="664" r="9" fill="#38bdf8"/><text class="badge" x="734" y="668" text-anchor="middle">*</text>
+  <text class="mod" x="565" y="680" fill="#7dd3fc">X3D Guidance</text>
+  <text class="sym" x="565" y="702">&#8466;_guide (spatiotemporal)</text>
+
+  <!-- total loss -->
+  <g filter="url(#sh)"><rect x="810" y="596" width="240" height="94" rx="14" fill="#2a1119" stroke="#fb7185" stroke-width="2.5"/></g>
+  <text class="mod" x="930" y="634" text-anchor="middle" fill="#fecdd3">Total Loss</text>
+  <text class="sym" x="930" y="658" text-anchor="middle">&#8466; = &#8466;_char + 0.1&#183;&#8466;_guide</text>
+  <text class="note" x="930" y="678" text-anchor="middle">supervised against GT clip Y</text>
+
+  <!-- GT tag -->
+  <g filter="url(#sh)"><rect x="1080" y="608" width="140" height="70" rx="12" fill="#14263a" stroke="#34d399" stroke-width="2"/></g>
+  <text class="mod" x="1150" y="640" text-anchor="middle" fill="#6ee7b7">GT clip</text>
+  <text class="sym" x="1150" y="662" text-anchor="middle">Y</text>
+
+  <!-- training arrows: route BELOW the SuperPrior box (y=470) -->
+  <path d="M1200,324 L1200,470 L160,470 L160,566" fill="none" stroke="#fb7185" stroke-width="1.8" stroke-dasharray="6 4" marker-end="url(#arR)"/>
+  <text class="ten" x="705" y="462" text-anchor="middle" fill="#fda4af">predicted SR tiles</text>
+  <line x1="250" y1="643" x2="298" y2="643" stroke="#fb7185" stroke-width="2" marker-end="url(#arR)"/>
+  <path d="M500,618 L525,600 L548,600" fill="none" stroke="#fb7185" stroke-width="2" marker-end="url(#arR)"/>
+  <path d="M500,668 L525,686 L548,686" fill="none" stroke="#fb7185" stroke-width="2" marker-end="url(#arR)"/>
+  <line x1="750" y1="600" x2="808" y2="626" stroke="#fb7185" stroke-width="2" marker-end="url(#arR)"/>
+  <line x1="750" y1="686" x2="808" y2="660" stroke="#fb7185" stroke-width="2" marker-end="url(#arR)"/>
+  <path d="M1150,608 L1150,568 L930,568 L930,594" fill="none" stroke="#34d399" stroke-width="1.8" stroke-dasharray="6 4" marker-end="url(#arS)"/>
+  <text class="ten" x="1000" y="560" text-anchor="middle" fill="#6ee7b7">Y</text>
+
+  <text class="note" x="1249" y="778" text-anchor="end">Ctrl-Plus-8K &#183; overview &#183; frozen components marked *</text>
+</svg>

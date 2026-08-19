@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 760" font-family="Inter, 'Segoe UI', system-ui, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b1220"/><stop offset="1" stop-color="#0f1a2e"/></linearGradient>
+    <linearGradient id="accentbar" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#38bdf8"/><stop offset=".5" stop-color="#a78bfa"/><stop offset="1" stop-color="#2dd4bf"/></linearGradient>
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#000000" flood-opacity="0.55"/></filter>
+    <marker id="arS" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#94a3b8"/></marker>
+    <marker id="arT" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#2dd4bf"/></marker>
+    <marker id="arV" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#a78bfa"/></marker>
+    <marker id="arK" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#38bdf8"/></marker>
+  </defs>
+  <style>
+    .title{font-size:28px;font-weight:800;fill:#f1f5f9}
+    .sub{font-size:14px;fill:#94a3b8}
+    .mod{font-size:16px;font-weight:700}
+    .modS{font-size:15px;font-weight:700}
+    .sym{font-size:13px;fill:#cbd5e1}
+    .note{font-size:11.5px;fill:#8ea3bd}
+    .ten{font-size:12px;fill:#b6c6db;font-style:italic}
+    .sec{font-size:13px;font-weight:700;letter-spacing:.6px}
+    .frz{font-size:10.5px;font-weight:700;fill:#0b1220}
+  </style>
+  <rect width="1280" height="760" fill="url(#bg)"/>
+  <rect x="0" y="0" width="1280" height="5" fill="url(#accentbar)"/>
+  <text class="title" x="40" y="48">Conditioning the Recurrence: Robust Flow + SuperPrior</text>
+  <text class="sub" x="41" y="70">Two frozen conditioners feed every recurrent update. At extreme scale the LR input barely constrains the output, so the prior supplies geometry and adapted flow keeps propagation stable.</text>
+
+  <!-- ===== LEFT INPUTS ===== -->
+  <g filter="url(#sh)"><rect x="40" y="148" width="120" height="54" rx="11" fill="#0f2033" stroke="#38bdf8" stroke-width="2"/></g>
+  <text class="modS" x="100" y="172" text-anchor="middle" fill="#7dd3fc">frame x&#8348;&#8331;&#8321;</text>
+  <text class="note" x="100" y="190" text-anchor="middle">previous</text>
+
+  <g filter="url(#sh)"><rect x="40" y="250" width="120" height="54" rx="11" fill="#0f2033" stroke="#38bdf8" stroke-width="2"/></g>
+  <text class="modS" x="100" y="274" text-anchor="middle" fill="#7dd3fc">frame x&#8348;</text>
+  <text class="note" x="100" y="292" text-anchor="middle">current</text>
+
+  <g filter="url(#sh)"><rect x="40" y="360" width="120" height="54" rx="11" fill="#152238" stroke="#2dd4bf" stroke-width="2"/></g>
+  <text class="modS" x="100" y="384" text-anchor="middle" fill="#5eead4">state h&#8348;&#8331;&#8321;</text>
+  <text class="note" x="100" y="402" text-anchor="middle">prev. hidden</text>
+
+  <!-- ===== FLOW LANE ===== -->
+  <text class="sec" x="250" y="132" fill="#7dd3fc">DEGRADATION-ROBUST MOTION</text>
+  <g filter="url(#sh)"><rect x="250" y="142" width="210" height="84" rx="13" fill="#0f2033" stroke="#38bdf8" stroke-width="2.4" stroke-dasharray="7 4"/></g>
+  <circle cx="444" cy="158" r="9" fill="#38bdf8"/><text class="frz" x="444" y="162" text-anchor="middle">*</text>
+  <text class="modS" x="268" y="170" fill="#7dd3fc">Flow estimator</text>
+  <text class="sym" x="268" y="192">f&#8348;&#8331;&#8321;&#8594;&#8348; = Flow(x&#8348;, x&#8348;&#8331;&#8321;)</text>
+  <text class="note" x="268" y="212">RPKNet &#183; self-supervised adaptation</text>
+
+  <g filter="url(#sh)"><rect x="560" y="250" width="190" height="84" rx="13" fill="#152238" stroke="#2dd4bf" stroke-width="2"/></g>
+  <text class="modS" x="655" y="282" text-anchor="middle" fill="#5eead4">Backward Warp</text>
+  <text class="sym" x="655" y="304" text-anchor="middle">h&#771;&#8348;&#8331;&#8321; = Warp(h&#8348;&#8331;&#8321;, f)</text>
+  <text class="note" x="655" y="322" text-anchor="middle">align state to current frame</text>
+
+  <!-- ===== PRIOR LANE ===== -->
+  <text class="sec" x="250" y="458" fill="#c4b5fd">TASK-ALIGNED SUPERPRIOR</text>
+  <g filter="url(#sh)"><rect x="250" y="470" width="190" height="84" rx="13" fill="#0f1830" stroke="#a78bfa" stroke-width="2.4" stroke-dasharray="7 4"/></g>
+  <circle cx="424" cy="486" r="9" fill="#a78bfa"/><text class="frz" x="424" y="490" text-anchor="middle">*</text>
+  <text class="modS" x="268" y="500" fill="#c4b5fd">SuperPrior &#934;</text>
+  <text class="sym" x="268" y="522">p&#8348; = &#934;(x&#8348;)</text>
+  <text class="note" x="268" y="540">frozen EDSR (SR-aligned)</text>
+
+  <g filter="url(#sh)"><rect x="500" y="470" width="150" height="84" rx="13" fill="#141024" stroke="#a78bfa" stroke-width="2"/></g>
+  <text class="modS" x="575" y="502" text-anchor="middle" fill="#c4b5fd">1&#215;1 proj &#936;</text>
+  <text class="sym" x="575" y="524" text-anchor="middle">p&#772;&#8348; = &#936;(p&#8348;)</text>
+  <text class="note" x="575" y="542" text-anchor="middle">match channels</text>
+
+  <!-- ===== CONCAT + R ===== -->
+  <g filter="url(#sh)"><rect x="770" y="340" width="110" height="150" rx="13" fill="#101c30" stroke="#64748b" stroke-width="2"/></g>
+  <text class="mod" x="825" y="392" text-anchor="middle" fill="#cbd5e1">concat</text>
+  <text class="sym" x="825" y="418" text-anchor="middle">[ x&#8348; ,</text>
+  <text class="sym" x="825" y="438" text-anchor="middle">p&#772;&#8348; ,</text>
+  <text class="sym" x="825" y="458" text-anchor="middle">h&#771;&#8348;&#8331;&#8321; ]</text>
+
+  <g filter="url(#sh)"><rect x="930" y="340" width="250" height="150" rx="14" fill="#152238" stroke="#2dd4bf" stroke-width="2.8"/></g>
+  <text class="mod" x="1055" y="398" text-anchor="middle" fill="#5eead4">Recurrent Update  R</text>
+  <text class="sym" x="1055" y="424" text-anchor="middle">h&#8348; = R([x&#8348;, p&#772;&#8348;, h&#771;&#8348;&#8331;&#8321;])</text>
+  <text class="note" x="1055" y="446" text-anchor="middle">concatenate + residual encoder</text>
+  <text class="note" x="1055" y="464" text-anchor="middle">&#8594; new hidden state h&#8348;</text>
+
+  <!-- ===== WHY CALLOUT ===== -->
+  <g filter="url(#sh)"><rect x="778" y="150" width="402" height="150" rx="14" fill="#141024" stroke="#a78bfa" stroke-width="1.6" stroke-dasharray="6 4"/></g>
+  <text class="modS" x="798" y="180" fill="#c4b5fd">Why these choices (empirically validated)</text>
+  <text class="note" x="798" y="206" fill="#a9b7cd">&#8226; Off-the-shelf flow collapses under &#215;16+ downscaling;</text>
+  <text class="note" x="798" y="224" fill="#a9b7cd">&#160;&#160;errors propagate through recurrence. Adaptation halves it.</text>
+  <text class="note" x="798" y="250" fill="#a9b7cd">&#8226; A task-aligned SR prior beats perceptual / texture priors,</text>
+  <text class="note" x="798" y="268" fill="#a9b7cd">&#160;&#160;and the gap widens as scale grows (identity, coherence).</text>
+
+  <!-- ===== ARROWS ===== -->
+  <!-- inputs into flow -->
+  <line x1="160" y1="172" x2="246" y2="168" stroke="#38bdf8" stroke-width="2" marker-end="url(#arK)"/>
+  <line x1="160" y1="277" x2="246" y2="204" stroke="#38bdf8" stroke-width="2" marker-end="url(#arK)"/>
+  <text class="ten" x="196" y="238" fill="#7dd3fc">x&#8348;, x&#8348;&#8331;&#8321;</text>
+  <!-- flow -> warp: leave the Flow box horizontally, arrive perpendicular into the
+       Warp box's top edge (a shallow approach used to run tangent to the border) -->
+  <path d="M460,186 C580,186 655,204 655,248" fill="none" stroke="#38bdf8" stroke-width="2" marker-end="url(#arK)"/>
+  <text class="ten" x="556" y="184" text-anchor="middle" fill="#7dd3fc">f&#8348;&#8331;&#8321;&#8594;&#8348;</text>
+  <!-- h_{t-1} -> warp -->
+  <line x1="160" y1="387" x2="558" y2="302" stroke="#2dd4bf" stroke-width="2" marker-end="url(#arT)"/>
+  <text class="ten" x="360" y="352" text-anchor="middle" fill="#5eead4">h&#8348;&#8331;&#8321;</text>
+  <!-- x_t -> SuperPrior: down the x=190 lane, into the box's LEFT edge
+       (routing along y=455 used to run through the section label) -->
+  <path d="M160,283 L190,283 L190,512 L248,512" fill="none" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#arK)"/>
+  <text class="ten" x="198" y="474" fill="#7dd3fc">x&#8348;</text>
+  <!-- SuperPrior -> proj -->
+  <line x1="440" y1="512" x2="498" y2="512" stroke="#a78bfa" stroke-width="2" marker-end="url(#arV)"/>
+  <text class="ten" x="469" y="504" text-anchor="middle" fill="#c4b5fd">p&#8348;</text>
+
+  <!-- into concat: x_t (mid), h~ (top), p_bar (bottom) -->
+  <path d="M160,268 L215,268 L215,414 L768,414" fill="none" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#arK)"/>
+  <text class="ten" x="470" y="406" text-anchor="middle" fill="#7dd3fc">x&#8348;</text>
+  <path d="M750,300 L762,340 L768,372" fill="none" stroke="#2dd4bf" stroke-width="2" marker-end="url(#arT)"/>
+  <text class="ten" x="736" y="366" text-anchor="end" fill="#5eead4">h&#771;&#8348;&#8331;&#8321;</text>
+  <path d="M650,505 L720,470 L768,458" fill="none" stroke="#a78bfa" stroke-width="2" marker-end="url(#arV)"/>
+  <text class="ten" x="702" y="500" text-anchor="middle" fill="#c4b5fd">p&#772;&#8348;</text>
+
+  <!-- concat -> R -->
+  <line x1="880" y1="415" x2="928" y2="415" stroke="#94a3b8" stroke-width="2" marker-end="url(#arS)"/>
+
+  <!-- R output -->
+  <path d="M1055,490 L1055,524" fill="none" stroke="#2dd4bf" stroke-width="2" marker-end="url(#arT)"/>
+  <text class="ten" x="1055" y="542" text-anchor="middle" fill="#5eead4">h&#8348;  &#8594; carried to next recurrent step</text>
+
+  <text class="note" x="1240" y="720" text-anchor="end">Ctrl-Plus-8K &#183; conditioning (detail 2 of 4)</text>
+</svg>

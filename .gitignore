@@ -1,0 +1,15 @@
+# Encoded comparison clips — served from GitHub Release assets, never committed.
+# Keep them here for local preview (point CFG.base in static/compare.js back at
+# the local path); 339 MB of MP4s would bloat history permanently on re-encode.
+scripts/crops_out_*/
+
+# Unused diagram exports: index.html references only the six dark diagrams/*.svg.
+diagrams/png/
+diagrams/*_light.svg
+
+# Working notes, not part of the published page.
+RESEARCH.md
+
+.claude/
+.DS_Store
+Thumbs.db
